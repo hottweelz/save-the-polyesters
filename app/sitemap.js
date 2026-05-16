@@ -1,4 +1,5 @@
-const BASE = 'https://savethepolyesters.org';
+import { SITE_URL } from '@/lib/site';
+
 const PATHS = [
   '', '/about', '/threats', '/rescue-stories', '/take-action', '/research', '/merchandise',
   '/legal/disclaimer', '/legal/terms', '/legal/privacy', '/legal/cookies',
@@ -7,8 +8,8 @@ const PATHS = [
 
 export default function sitemap() {
   const now = new Date();
-  return PATHS.map(p => ({
-    url: `${BASE}${p}`,
+  return PATHS.map((p) => ({
+    url: `${SITE_URL}${p}`,
     lastModified: now,
     changeFrequency: p === '' ? 'weekly' : 'monthly',
     priority: p === '' ? 1.0 : 0.7,

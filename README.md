@@ -29,6 +29,20 @@ npm run build        # emits ./out/
 
 The `out/` directory is a complete static site (`next.config.mjs` sets `output: 'export'`). Serve it from any static host.
 
+### Site URL (used for OG image, sitemap, JSON-LD)
+
+All absolute URLs are derived from one env var at build time:
+
+```bash
+NEXT_PUBLIC_SITE_URL=https://savethepolyesters.org
+```
+
+Fallback order: `NEXT_PUBLIC_SITE_URL` → Cloudflare's auto-set `CF_PAGES_URL`
+→ `http://localhost:3000`. Until you set a real domain, social-media scrapers
+will see the placeholder, so set this in the Cloudflare dashboard
+(**Workers & Pages → your project → Settings → Variables → Production**)
+the moment you have a domain.
+
 ### Deploying to Cloudflare (Workers Static Assets)
 
 Repo: <https://github.com/hottweelz/save-the-polyesters>.

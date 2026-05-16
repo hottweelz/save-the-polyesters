@@ -4,13 +4,14 @@ import SiteHeader from '@/components/SiteHeader';
 import SiteFooter from '@/components/SiteFooter';
 import StickyDonate from '@/components/StickyDonate';
 import CookieConsent from '@/components/CookieConsent';
+import { SITE_URL } from '@/lib/site';
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter', display: 'swap' });
 const garamond = EB_Garamond({ subsets: ['latin'], variable: '--font-serif', display: 'swap' });
 const playfair = Playfair_Display({ subsets: ['latin'], variable: '--font-display', display: 'swap' });
 
 export const metadata = {
-  metadataBase: new URL('https://savethepolyesters.org'),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: 'Save The Polyesters — Protecting Earth’s Most Misunderstood Fiber-Bearing Mammal',
     template: '%s · Save The Polyesters',
@@ -57,8 +58,8 @@ export default function RootLayout({ children }) {
               '@type': 'NGO',
               name: 'Polyester Conservation Coalition',
               alternateName: 'Save The Polyesters',
-              url: 'https://savethepolyesters.org',
-              logo: '/media/polyester_sign-trans.webp',
+              url: SITE_URL,
+              logo: `${SITE_URL}/media/polyester_sign-trans.webp`,
               description:
                 'A nonprofit alliance dedicated to the protection of wild polyester populations and the restoration of microfiber habitats worldwide.',
               foundingDate: '2014-04-22',
