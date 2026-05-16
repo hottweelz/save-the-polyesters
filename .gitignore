@@ -4,3 +4,13 @@ out/
 .DS_Store
 .env*.local
 *.log
+
+# AI tooling / agent mirrors — kept local, not pushed
+agents/
+.ai/
+.codex/
+.windsurf/
+.github/
+
+# Working media (Firefly source files etc.)
+videos/*.mp4
