@@ -1,0 +1,18 @@
+{
+  "mcpServers": {
+    "openaiDeveloperDocs": {
+      "type": "http",
+      "url": "https://developers.openai.com/mcp"
+    },
+    "codex": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "codex-mcp-server"]
+    },
+    "filesystem": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["-y", "@modelcontextprotocol/server-filesystem", "."]
+    }
+  }
+}

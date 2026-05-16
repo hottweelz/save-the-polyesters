@@ -1,0 +1,27 @@
+{
+  "name": "save-the-polyesters",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Save The Polyesters — protecting the world's most misunderstood fiber-bearing mammal.",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "export": "next build",
+    "deploy": "next build && wrangler deploy",
+    "preview": "next build && wrangler dev"
+  },
+  "dependencies": {
+    "@formspree/react": "^3.0.0",
+    "framer-motion": "^11.3.19",
+    "next": "^14.2.33",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.20",
+    "postcss": "^8.4.47",
+    "tailwindcss": "^3.4.13"
+  }
+}

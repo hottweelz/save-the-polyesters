@@ -1,0 +1,21 @@
+/**
+ * Cloudflare Workers (Static Assets) deployment config.
+ * Docs: https://developers.cloudflare.com/workers/static-assets/
+ *
+ * This site is a pure static export from `next build` → ./out.
+ * `npx wrangler deploy` uploads the contents of ./out and serves them
+ * from the Cloudflare edge. No Worker runtime code is needed.
+ */
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "save-the-polyesters",
+  "compatibility_date": "2026-05-16",
+  "assets": {
+    "directory": "./out",
+    "not_found_handling": "404-page",
+    "html_handling": "auto-trailing-slash"
+  },
+  "observability": {
+    "enabled": true
+  }
+}
