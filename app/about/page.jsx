@@ -20,11 +20,11 @@ function FragmentRow({ k, v }) {
 }
 
 const LIFECYCLE = [
-  { phase: 'Tuftling',  age: '0–4 wks', body: 'Eyes closed. Microfiber coat 100% downy undercoat. Cannot regulate body temperature without burrow insulation.' },
-  { phase: 'Fledgefluff', age: '4–11 wks', body: 'First molt begins. Vulnerable to acrylic-runoff contamination. Begins responding to ultrasonic mother-calls.' },
-  { phase: 'Sub-Adult', age: '3–7 mo',  body: 'Topcoat develops weft-aligned guard hairs. Begins independent burrow expansion.' },
-  { phase: 'Spinner',   age: '7–18 mo', body: 'Reproductive maturity. Adult coat fully expressed. Average annual fiber yield (in undisturbed populations): 38g.' },
-  { phase: 'Elder',     age: '18 mo+',  body: 'Coat density decreases. Elder polyesters serve as multi-generational burrow custodians.' },
+  { phase: 'Tuftling',  age: '0–4 wks', body: 'Eyes closed. Microfiber coat 100% downy undercoat. Cannot regulate body temperature without burrow insulation.', img: '/media/stage-tuftling.webp' },
+  { phase: 'Fledgefluff', age: '4–11 wks', body: 'First molt begins. Vulnerable to acrylic-runoff contamination. Begins responding to ultrasonic mother-calls.', img: '/media/stage-fledgefluff.webp' },
+  { phase: 'Sub-Adult', age: '3–7 mo',  body: 'Topcoat develops weft-aligned guard hairs. Begins independent burrow expansion.', img: '/media/stage-sub-adult.webp' },
+  { phase: 'Spinner',   age: '7–18 mo', body: 'Reproductive maturity. Adult coat fully expressed. Average annual fiber yield (in undisturbed populations): 38g.', img: '/media/stage-spinner.webp' },
+  { phase: 'Elder',     age: '18 mo+',  body: 'Coat density decreases. Elder polyesters serve as multi-generational burrow custodians.', img: '/media/stage-elder.webp' },
 ];
 
 export default function AboutPage() {
@@ -102,15 +102,74 @@ export default function AboutPage() {
         <ol className="mt-10 grid md:grid-cols-5 gap-4 md:gap-2">
           {LIFECYCLE.map((s, i) => (
             <Reveal key={s.phase} delay={i * 0.07}>
-              <li className="card h-full relative">
+              <li className="card h-full relative flex flex-col">
                 <span className="absolute -top-3 left-6 inline-grid place-items-center w-7 h-7 rounded-full bg-rose-600 text-cream-50 text-xs font-bold">{i + 1}</span>
                 <p className="font-display text-xl text-moss-900">{s.phase}</p>
                 <p className="text-xs uppercase tracking-widest text-moss-700/70 mt-1">{s.age}</p>
                 <p className="text-sm text-moss-700/90 mt-3 leading-relaxed">{s.body}</p>
+                <div className="relative mt-4 aspect-square w-full">
+                  <Image
+                    src={s.img}
+                    alt={`Illustrated ${s.phase} stage polyester`}
+                    fill
+                    sizes="(min-width: 768px) 20vw, 80vw"
+                    className="object-contain"
+                  />
+                </div>
               </li>
             </Reveal>
           ))}
         </ol>
+      </section>
+
+      {/* discovery, diet, communication */}
+      <section className="container-wide my-20">
+        <Reveal>
+          <p className="eyebrow">Fig. 3 · The basics, often missed</p>
+          <h2 className="h-section mt-3">Three things every donor asks at the second meeting.</h2>
+        </Reveal>
+        <div className="mt-10 grid md:grid-cols-3 gap-6">
+          <Reveal>
+            <article className="card h-full">
+              <p className="eyebrow">What they eat</p>
+              <h3 className="font-display text-xl text-moss-900 mt-2">A diet you will not have heard of.</h3>
+              <p className="mt-3 text-sm text-moss-700/90 leading-relaxed">
+                Wild polyesters subsist almost entirely on <em>microfiber substrate</em> &mdash; the
+                fine, semi-decomposed plant-fiber mulch that accumulates in undisturbed loose-loam
+                soils. A healthy adult consumes roughly 18 grams per day. The substrate cannot be
+                synthesized at industrial scale, which is why farmed animals are fed a stress-inducing
+                cellulose-pellet substitute that contributes directly to chronic compulsive shedding.
+              </p>
+            </article>
+          </Reveal>
+          <Reveal delay={0.08}>
+            <article className="card h-full">
+              <p className="eyebrow">How they speak</p>
+              <h3 className="font-display text-xl text-moss-900 mt-2">Three decades of unheard grief.</h3>
+              <p className="mt-3 text-sm text-moss-700/90 leading-relaxed">
+                Polyester vocalization sits in the <strong>14&ndash;22 kHz</strong> band &mdash;
+                comfortably above unaided human hearing. The species uses three documented call
+                types: a parent&ndash;young location chirp, an adult mating trill, and the
+                distress call we now associate with sheared adults. We could not record any of
+                these until 2017. We had no excuse.
+              </p>
+            </article>
+          </Reveal>
+          <Reveal delay={0.16}>
+            <article className="card h-full">
+              <p className="eyebrow">How we found them</p>
+              <h3 className="font-display text-xl text-moss-900 mt-2">East Quogue, August 1985.</h3>
+              <p className="mt-3 text-sm text-moss-700/90 leading-relaxed">
+                The species was formally described in 1991. It was already extinct in three of its
+                seven original ranges by then. The first organized human awareness of its industrial
+                exploitation traces to a single morning-drive phone call to Z100 (WHTZ 100.3 FM)
+                from a tri-state listener known only as &ldquo;Mr. Leonard.&rdquo; The recording
+                survives.{' '}
+                <a href="/our-story/" className="underline underline-offset-4 hover:text-rose-600">Read the full origin story →</a>
+              </p>
+            </article>
+          </Reveal>
+        </div>
       </section>
 
       <section className="container-wide my-20 grid md:grid-cols-2 gap-10 items-start">

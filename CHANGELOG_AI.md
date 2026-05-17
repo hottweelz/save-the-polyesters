@@ -5,6 +5,80 @@ Every AI agent reads this before starting work and updates it before ending work
 
 ---
 
+### 2026-05-16 (lore expansion) — Claude Code (Opus 4.7)
+
+Task:
+- Add lifecycle thumbnails to the 5 About-page stage cards.
+- Switch OG image to user-provided `opengraph_polyester.png`.
+- Audit verbiage across all pages, fill the biggest gaps.
+- Build out the 1985 "Mr. Leonard" origin story, then reconcile with the actual surviving audio.
+
+Selected agent team:
+- Default senior engineer (no specialized agent invoked).
+
+Changes made:
+- About: added small per-stage WebP thumbnails (resized via `cwebp` to 480px, ~19–38 KB each, written to `public/media/stage-*.webp`). Added a new "Fig. 3" section with Diet / Communication / Discovery cards, last linking to /our-story/.
+- OG/Twitter cards: switched to `/media/opengraph_polyester.png` (1536×1024) with explicit width/height/alt in `app/layout.jsx`.
+- Newsletter: new `components/NewsletterSignup.jsx` (Formspree-backed, dark/light variants), wired into footer.
+- Footer rebuilt: 4-column layout (description + Learn + Act + Newsletter), added Contact / Our Story / Team / Safe-Communities links, "in memoriam of the East Quogue colony (1985)" line.
+- Header nav: added Our Story.
+- 4 new pages:
+  - `/our-story/` — flagship lore page anchored on the **real** 1985 Z100 Scott Shannon Morning Zoo call by "Mr. Leonard." Reframed as in-universe testimony (Mr. Leonard genuinely distraught; on-air comedy framing was the only register a 7:40 AM morning show would allow). Quotes the actual recording, including the closing cry "I CAN BARELY SAY POLYEHE, POLYESE!" and the Shannon West-Quogue→East-Quogue correction that, in-universe, sent the 1986 Stony Brook intervention to the right town. Links to the YouTube video.
+  - `/contact/` — 6 contact channels (general/press/hotline/counsel/legacy/sightings), 6 offices, Formspree contact form.
+  - `/team/` — 8 leadership bios, 48 founding-charter signatories list, "Mr. Leonard not listed" note.
+  - `/safe-communities/` — the 41 actually-listed certified municipalities, 5 criteria, 2 named decertifications. Fixes the prior dead `href="#"` on Take Action.
+- Rescue Stories: added dates to each story, rollup-of-4 stats strip, full Report-a-Sighting Formspree form (split to `components/ReportSightingForm.jsx` so the page stays a server component with metadata).
+- Threats: added 4-stat intro strip (CountUp) above the existing hero figure.
+- Home: new "What, exactly, is a polyester?" card with CTAs to /about/ and /our-story/.
+- Take Action: "View the 41 certified communities" now points to `/safe-communities/`.
+- `lib/forms.js`: added `newsletter`, `contact`, `sighting` keys (all to existing FORMSPREE_ID `xdajnapp`).
+- `app/sitemap.js`: registered the 4 new routes.
+
+Audio transcription:
+- Installed `yt-dlp` (Homebrew). YouTube now gates auto-caption fetches behind PO tokens for server IPs (consistent 429), so fell back to audio download → local Whisper.
+- Installed `whisper-cpp` (Homebrew), pulled `ggml-base.en.bin` (~141 MB) to `/tmp/whisper-models/`.
+- Pulled best audio for `oCCCkprVbCs` (137 s, "Z100 Mr Leonard 'Polyester' Call [WHTZ NYC] (1985)"), transcoded to 16 kHz mono WAV via yt-dlp's ffmpeg post-processor, transcribed in ~3.6 s.
+- Saved raw transcript to `.ai/mr-leonard-transcript-1985.txt` (gitignored — see `.gitignore`). Base.en model is weak on proper nouns ("Quogue" → "Quad", "Trigère" → "Frisier/Tresier", "Sansabelt" → "Sensistly", "slaughter" → "spatter") — corrected interactively with the user (who recognized the bit from when he was 10).
+
+Files touched:
+- Added: `app/{our-story,contact,team,safe-communities}/page.jsx`, `components/{NewsletterSignup,ReportSightingForm}.jsx`, `public/media/stage-*.webp` (×5), `public/media/opengraph_polyester.png`, `images/opengraph_polyester.png`, `images/webp/*Photoroom.webp` (×10).
+- Modified: `app/{page,layout,about/page,threats/page,rescue-stories/page,take-action/page,sitemap}.{jsx,js}`, `components/{SiteFooter,SiteHeader}.jsx`, `lib/forms.js`.
+
+Commands/tests run:
+```bash
+cwebp -resize 480 0 -q 82 …  # 5× stage thumbnails
+brew install yt-dlp whisper-cpp
+yt-dlp -f bestaudio --extract-audio --audio-format wav … oCCCkprVbCs
+whisper-cli -m ggml-base.en.bin -f /tmp/mrleonard.wav --output-txt
+npx next build              # 23 routes prerendered, all green
+```
+
+Results:
+- Build green throughout, 23 static routes (was 19).
+- 4 new pages, 2 new components, newsletter wired, all dead `#` links resolved EXCEPT the WIP PDF placeholders (research downloads, poster downloads) — intentionally left per user.
+- Transcript saved locally; YouTube link embedded on /our-story/.
+
+Decisions made:
+- Reconciled the in-universe lore with the actual surviving audio per user's call: kept Mr. Leonard's distress sincere, reframed the comedy-bit surface as the only register morning-drive radio permitted. Scott Shannon's accidental West→East Quogue correction is now the lore's pivot point.
+- Picked one image per lifecycle stage from the 10 user-supplied photoroom files (defaults: tuftling/fledgefluff/sub_adult `_polyester` variants, spinner-Photoroom, elder2-Photoroom). Easy to swap by edit.
+- Kept rescue-stories as a server component by extracting `ReportSightingForm` to its own client component — preserved `metadata` export.
+
+Known issues:
+- Research download/dataset/cite buttons and 4 poster downloads remain `href="#"` placeholders pending PDF work.
+- Z100/Scott-Shannon proper nouns in lore are based on user identification + auto-transcript; some on-page detail (e.g. listing Joan Baez/Jackson Browne as picketers) comes from Mr. Leonard's own on-air claim, in-universe accepted as fact.
+
+Next recommended steps:
+- Generate the research PDFs + 4 poster PDFs and wire the `#` links.
+- Consider a re-transcribe with `ggml-medium.en.bin` for cleaner proper nouns if anyone wants to put the transcript itself on /our-story/ as a sidebar.
+- The 5 stage thumbnails could each get an alt text pass for screen readers (currently generic "Illustrated {phase} stage polyester").
+
+Notes for next agent:
+- All new forms point at `FORMSPREE_ID` (`xdajnapp`) via per-purpose keys in `lib/forms.js` — split endpoints when inbox routing matters.
+- `/our-story/` is now load-bearing for site identity. Treat the West-Quogue→East-Quogue correction and "I CAN BARELY SAY POLYEHE, POLYESE!" line as canon.
+- The `images/webp/*Photoroom.webp` source files are large originals; only the resized `public/media/stage-*.webp` are referenced in code. Consider gitignoring the originals if repo size becomes a concern.
+
+---
+
 ### 2026-05-01 — Claude Code
 
 Task:

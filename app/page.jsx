@@ -40,8 +40,8 @@ export default function HomePage() {
             </Reveal>
             <Reveal delay={0.1}>
               <h1 className="h-display text-5xl md:text-7xl lg:text-[5.5rem] mt-4 text-moss-900">
-                They were here first.<br/>
-                <span className="text-rose-600 italic">We are still pretending they aren&rsquo;t.</span>
+                They were here before us.<br/>
+                <span className="text-rose-600 italic">We&rsquo;re still pretending they weren&rsquo;t.</span>
               </h1>
             </Reveal>
             <Reveal delay={0.2}>
@@ -92,6 +92,30 @@ export default function HomePage() {
             </Reveal>
           ))}
         </div>
+      </section>
+
+      {/* WHAT IS A POLYESTER */}
+      <section className="container-wide my-24 grid md:grid-cols-[1fr_1.4fr] gap-10 items-center">
+        <Reveal>
+          <p className="eyebrow">First time here?</p>
+          <h2 className="h-section mt-3">What, exactly, is a polyester?</h2>
+        </Reveal>
+        <Reveal delay={0.1}>
+          <div className="card">
+            <p className="text-moss-700/90 leading-relaxed">
+              <em>Polysynthia domestica</em> is a small, burrow-dwelling, fiber-bearing mammal native
+              to the soft-loam corridors of North America, Western Europe, and parts of the South
+              Pacific. Adults weigh between 180 and 240 grams, communicate in the ultrasonic band
+              above human hearing, and produce a naturally extruded keratin analog functionally
+              identical to commercial polyester fiber. They were quietly domesticated for industrial
+              shearing beginning in the 1950s. We did not formally know they existed until 1985.
+            </p>
+            <div className="mt-5 flex flex-wrap gap-3">
+              <Link href="/about/" className="btn-quiet text-sm py-2 px-5">The full species profile</Link>
+              <Link href="/our-story/" className="btn-ghost text-sm py-2 px-5">How we found them (1985)</Link>
+            </div>
+          </div>
+        </Reveal>
       </section>
 
       {/* PULL QUOTE */}

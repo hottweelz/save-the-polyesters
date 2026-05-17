@@ -112,6 +112,27 @@ export default function ThreatsPage() {
         </Reveal>
       </section>
 
+      <section aria-label="Cumulative threat stats" className="container-wide mb-12">
+        <div className="card grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-6">
+          <div>
+            <p className="stat-num"><CountUp to={91} suffix="%" /></p>
+            <p className="stat-label">Wild population decline since 1985</p>
+          </div>
+          <div>
+            <p className="stat-num"><CountUp to={96} suffix="%" /></p>
+            <p className="stat-label">Of original range now lost or fragmented</p>
+          </div>
+          <div>
+            <p className="stat-num"><CountUp to={1428} suffix="+" /></p>
+            <p className="stat-label">Burrows lost per hyperscale data-center build</p>
+          </div>
+          <div>
+            <p className="stat-num"><CountUp to={11} suffix=" min" /></p>
+            <p className="stat-label">Average time between burrow destruction events, North America</p>
+          </div>
+        </div>
+      </section>
+
       <section className="container-wide mb-12">
         <Reveal>
           <figure className="rounded-3xl overflow-hidden shadow-soft bg-cream-100">

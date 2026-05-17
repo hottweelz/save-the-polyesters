@@ -386,7 +386,7 @@ function SafeCommunitySection() {
             <button onClick={() => setOpen(o => !o)} className="btn-quiet">
               {open ? 'Hide the intake form' : 'Request the certification packet'}
             </button>
-            <Link href="#" className="btn-ghost">View the 41 certified communities</Link>
+            <Link href="/safe-communities/" className="btn-ghost">View the 41 certified communities</Link>
           </div>
 
           {open && (

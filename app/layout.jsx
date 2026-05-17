@@ -28,13 +28,13 @@ export const metadata = {
     description:
       'They cannot speak for themselves. Help us protect the last wild polyester populations from data centers, fast fashion, and habitat collapse.',
     siteName: 'Save The Polyesters',
-    images: ['/media/baby_polyester_campaign.webp'],
+    images: [{ url: '/media/opengraph_polyester.png', width: 1536, height: 1024, alt: 'Save The Polyesters' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Save The Polyesters',
     description: 'They cannot speak for themselves.',
-    images: ['/media/baby_polyester_campaign.webp'],
+    images: [{ url: '/media/opengraph_polyester.png', width: 1536, height: 1024, alt: 'Save The Polyesters' }],
   },
   robots: { index: true, follow: true },
 };
