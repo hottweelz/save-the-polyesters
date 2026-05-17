@@ -5,6 +5,68 @@ Every AI agent reads this before starting work and updates it before ending work
 
 ---
 
+### 2026-05-16 (Annual Report + Newsroom + Memorial) — Claude Code (Opus 4.7)
+
+Task:
+- Build Tier-1 items 1–3 from the standing queue: Annual Report, Newsroom, Memorial / Wall of Names.
+
+Selected agent team:
+- Default senior engineer.
+
+Changes made:
+- New `/annual-report/` page: FY2025 financial transparency. Four headline stats (revenue $14.3M, expenses $13.9M, 92¢ programmatic, $87 average gift). Income breakdown (5 categories, CSS-bar visualization). Expense breakdown (the 78/14/8 split from the FAQ — kept consistent intentionally). Six programmatic-results stats. Four named giving circles with member counts and anonymity-by-default disclosure. Five governance commitments (Heller Bergstrom audit firm, 3.5× salary ratio confirmed, 9-member volunteer board, no employee equity in declined industries, fiscal-sponsorship arrangement with Heron Conservation Trust EIN 47-1922041). Form 990 / financial statements CTA → /contact/. Report schema (schema.org/Report with reportNumber, datePublished, publisher).
+- New `/news/` page: 9 dated press releases / statements / coverage items (chronological, most recent first). Each is an inline `<details>` accordion with date, category badge, headline, dek, multi-paragraph body. Items: Hillsboro statement (Mar 2026), East Quogue spring tuftlings (Feb 2026), Senate petition delivery (Feb 2026), Bristol UK certification (Jan 2026), FY2025 report release (Dec 2025), Stratton ME decertification (Nov 2025), Imani Olaide named Comms Lead (Oct 2025), Atlantic op-ed by Dr. Vossler (Sep 2025), 40th-anniversary Z100 commemoration (Aug 2025). CollectionPage + ItemList schema with 9 NewsArticle entries (each carries datePublished, articleSection, articleBody).
+- New `/memorial/` page: hero "The Wall of Names." East Quogue 1985 colony rendered as a 50×28 CSS grid of 1,400 rose-tinted squares against a moss-900 background (server-rendered, no JS, role="img" with aria-label, individual squares aria-hidden). Six named human losses (rescuer drowning, overnight driver killed by drunk driver, vet from chronic wrist injury, translator from heart attack, founding signatory at 78, volunteer struck by site-clearance equipment in Hillsboro Nov 2025). Five sites of grief. Annual commemoration call-out (next: Mon Aug 17 2026). Hand-curated submission form (`MemorialSubmissionForm` client component, Formspree-backed) attributed to a single staff member (Sasha Ren) who reads every submission within 7 days and writes back personally before any name is added.
+- Schema on /memorial/: Place (East Quogue Memorial Burrow Restoration with PostalAddress and publicAccess=PublicAccessOnlyDuringEvents) + Event (annual commemoration, 2026-08-17, location refs the Place via @id, organizer=NGO, isAccessibleForFree=true).
+- `lib/forms.js`: added `memorial` key → existing FORMSPREE_ID.
+- Footer Learn column: + Newsroom, + The Wall of Names. Footer Act column: + FY2025 Annual Report.
+- `app/sitemap.js`: registered all three new routes.
+- `public/llms.txt`: added entries for /news/, /memorial/, /annual-report/ with their one-line hooks.
+
+Files touched:
+- Added: `app/{annual-report,news,memorial}/page.jsx`, `components/MemorialSubmissionForm.jsx`.
+- Modified: `app/sitemap.js`, `components/SiteFooter.jsx`, `lib/forms.js`, `public/llms.txt`.
+
+Commands/tests run:
+```bash
+npx next build                                # 27 static routes, all green
+grep -o '"@type":"[A-Z][a-zA-Z]*"' .next/server/app/{annual-report,news,memorial}.html | sort | uniq -c
+grep -o 'aspect-square' .next/server/app/memorial.html | wc -l   # 2800 = 1400 × 2 (HTML + RSC payload)
+```
+
+Results:
+- 27 static routes; +3 pages vs prior commit.
+- Verified schema render:
+  - /annual-report: 1 Report + Organization wrappers
+  - /news: 1 CollectionPage + 1 ItemList + 9 ListItem + 9 NewsArticle
+  - /memorial: 1 Event + 1 Place + 1 PostalAddress + 2 NGO
+- Confirmed all 1,400 East Quogue memorial squares render server-side.
+
+Decisions made:
+- Did NOT introduce a charting library for the annual report. Used CSS-driven bar segments (`<div>` with width%). Loses interactivity, keeps bundle weight, and the numbers are the satire — the chart is decorative.
+- Made the 1,400-square memorial grid server-rendered with each square aria-hidden and the grid wrapper carrying a single aria-label. Screen readers get one descriptive announcement, not 1,400 list items. The visual impact is the point; the accessibility text carries the count and meaning.
+- Newsroom is a single page with `<details>` expansion per item, not per-item dynamic routes. Simpler, all-in-one schema, indexable. When item count grows past ~20 we should split to /news/[slug]/.
+- The most recent memorial entry is Cole Westbrook (Hillsboro, Nov 2025). This connects the memorial directly to the most recent newsroom statement about the same incident — cross-page emotional through-line is intentional.
+- Sasha Ren as the named memorial keeper is a single-purpose role. Real foundations have these; satirically, it's the gentlest possible way to communicate "the Wall is not algorithmic."
+
+Known issues:
+- Annual Report PDFs (Form 990, audit letter, full financial statements) are referenced as "being prepared for public posting" — still WIP per long-standing PDF hold.
+- Newsroom op-ed item ("What the data centers know that you don't") links generically to theatlantic.com without a specific URL; intentional to avoid impersonating real Atlantic content.
+
+Next recommended steps (remaining Tier-1/Tier-2 queue):
+- Volunteer page (Tier 1 #4 — distinct from /take-action/, with named roles like Overnight Rescue Driver, Burrow Census Volunteer, Translation Corps).
+- Glossary (Tier 2 — A–Z of in-universe vocabulary, DefinedTermSet schema pattern from /safe-communities/).
+- Field Guide / "How to identify a polyester" (Tier 2 — pairs with Report-a-Sighting form).
+- Press Kit (Tier 2 — downloadable fact sheet, founder bios, b-roll description).
+- Educator Resources (Tier 2 — lesson plans, classroom posters, K–8 curriculum).
+
+Notes for next agent:
+- The memorial grid pattern (`Array.from({length: N}).map(...)` with aria-hidden squares and a single labelled wrapper) is reusable for any "N individuals" visualization on future pages.
+- Annual Report should be reissued each year as `/annual-report/[year]/`; current page is implicitly FY2025. When FY2026 ships, current page becomes `/annual-report/2025/` and `/annual-report/` becomes the most-recent index.
+- The Newsroom item count (currently 9) is the right ceiling before splitting to dynamic routes; past ~20 the inline-details pattern gets unwieldy.
+
+---
+
 ### 2026-05-16 (FAQ + LLM optimization) — Claude Code (Opus 4.7)
 
 Task:

@@ -38,6 +38,8 @@ export default function SiteFooter() {
             <li><Link href="/research/">Research</Link></li>
             <li><Link href="/rescue-stories/">Rescue Stories</Link></li>
             <li><Link href="/team/">Field Team</Link></li>
+            <li><Link href="/news/">Newsroom</Link></li>
+            <li><Link href="/memorial/">The Wall of Names</Link></li>
             <li><Link href="/faq/">FAQ</Link></li>
           </ul>
         </div>
@@ -49,6 +51,7 @@ export default function SiteFooter() {
             <li><Link href="/take-action/#donate">Donate</Link></li>
             <li><Link href="/take-action/#adopt">Adopt a Polyester</Link></li>
             <li><Link href="/safe-communities/">Polyester-Safe Communities</Link></li>
+            <li><Link href="/annual-report/">FY2025 Annual Report</Link></li>
             <li><Link href="/merchandise/">Shop</Link></li>
             <li><Link href="/contact/">Contact &amp; Press</Link></li>
           </ul>
