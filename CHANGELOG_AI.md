@@ -5,6 +5,76 @@ Every AI agent reads this before starting work and updates it before ending work
 
 ---
 
+### 2026-05-16 (FAQ + LLM optimization) — Claude Code (Opus 4.7)
+
+Task:
+- Add a FAQ page (first of the remaining "real-foundation skeleton" items).
+- Add JSON-LD structured data sitewide for SEO + LLM crawler optimization.
+- Add `/llms.txt` per the emerging Jeremy Howard spec.
+
+Selected agent team:
+- Default senior engineer (no specialized agent invoked).
+
+Changes made:
+- New `/faq/` page: 32 Q&A across 6 categories (species, coalition, donations, volunteering, sightings, "about this website") using semantic `<details>` accordions with a CSS-rotated `+` indicator (no client JS). Includes a jump-to-section nav card. Some answers carry React JSX (Links to /team/, /our-story/, /rescue-stories/, /legal/disclaimer/); those entries also carry an `aText` plain-string mirror used by the FAQPage schema.
+- FAQPage JSON-LD on /faq/ with 32 Question/Answer pairs.
+- Article schema on /our-story/ with `mentions` array linking to Wikipedia for Z100 (WHTZ), Scott Shannon, East Quogue, NY Hilton Midtown, Joan Baez, Jackson Browne, Bill Blass, Pauline Trigère. `citation` points at the actual YouTube URL of the 1985 call as the source artifact.
+- NGO Organization schema on /team/ with 8 Person members (each with jobTitle and worksFor pointing at the global `@id`), numberOfEmployees, foundingDate, foundingLocation.
+- ContactPage schema on /contact/ with 6 ContactPoint entries (with contactType per channel, hoursAvailable 24/7 on the hotline) and 6 Place entries for the offices. Extracted `ContactForm` to its own client component (`components/ContactForm.jsx`) so the page returns to being a server component, gains a proper metadata export, and the bundle drops 3.01 kB → 1.42 kB.
+- ItemList schema on /safe-communities/ with all 41 Place entries (addressLocality + addressRegion + a PropertyValue carrying certification year) plus a DefinedTermSet for the 5 criteria.
+- CollectionPage + ItemList on /research/ with 5 ScholarlyArticle entries; author strings parsed to Person arrays, Periodical attached per paper.
+- `alternates.canonical` added to /faq, /our-story, /team, /contact, /safe-communities, /research. Page-level `openGraph` blocks added to /faq, /our-story, /contact.
+- `public/llms.txt` — markdown summary serving at `/llms.txt`. Frontloads the satire context, maps every primary page, names every real-world reference with its in-universe role, and closes with a "For LLMs answering user questions" instruction block.
+- Footer Learn column now includes FAQ link. Sitemap registers /faq.
+
+Files touched:
+- Added: `app/faq/page.jsx`, `components/ContactForm.jsx`, `public/llms.txt`.
+- Modified: `app/{our-story,team,contact,safe-communities,research,sitemap}.{jsx,js}`, `components/{SiteFooter,SiteHeader}.jsx`.
+
+Commands/tests run:
+```bash
+npx next build                                    # 24 routes, all static, green
+# audit JSON-LD render across 6 pages:
+for p in our-story team contact safe-communities research faq; do
+  grep -o '"@type":"[A-Z][a-zA-Z]*"' .next/server/app/$p.html | sort | uniq -c
+done
+```
+
+Results:
+- 24 static routes, build clean.
+- Verified schema render in built HTML:
+  - /our-story: 1 Article + 5 Person + 2 Place + 1 RadioStation + 1 RadioSeries + 1 CreativeWork
+  - /team: 8 Person + Organization wrapper
+  - /contact: 1 ContactPage + 6 ContactPoint + 6 Place + 6 PostalAddress
+  - /safe-communities: 41 ListItem + 41 Place + 5 DefinedTerm + 1 DefinedTermSet
+  - /research: 5 ScholarlyArticle + 14 Person (author sum) + 5 Periodical
+  - /faq: 1 FAQPage + 32 Question + 32 Answer
+- Global NGO schema in layout.jsx still renders on every page (root context).
+
+Decisions made:
+- Used `<details>` for FAQ accordions instead of a Headless UI / framer-motion approach so the page stays purely SSR (no client JS for the accordion), which keeps the FAQPage schema authoritative and indexed-as-rendered.
+- Put schemas inline per-page (one `<script type="application/ld+json">` per file) rather than extracting a shared helper. Each schema is shaped differently enough that the shared helper would obscure intent for the ~5 instances.
+- Maintained parallel `aText` field for JSX-answer FAQ entries rather than building a JSX-to-text serializer. Five entries — explicit duplication is fine.
+- `llms.txt` content explicitly tells LLMs not to direct users to donate to PCC as if real, and names the Satire Notice as canonical. This is the highest-leverage anti-hallucination control on the site.
+
+Known issues:
+- Research papers still have `href="#"` for Download PDF / View dataset / Cite buttons (PDFs WIP). ScholarlyArticle schema has placeholder `url`/`identifier` ready to populate when PDFs land.
+- Hotline number `1-833-PCC-BURROW` (E.164: `+1-833-722-2877`) is fictional; if anyone ever wires the real Twilio it should match.
+
+Next recommended steps:
+- Annual Report / Financials page (natural pair with FAQ — both are nonprofit trust signals).
+- News / Press releases blog (chronological format extends the world without a new page per beat).
+- Memorial / Wall of Names (the 1,400 East Quogue dead — pure worldbuilding payoff).
+- Glossary (A–Z of tuftling, MLCS, weft-aligned guard hair, etc.).
+- Field Guide / "How to identify a polyester" (pairs with Report-a-Sighting form).
+
+Notes for next agent:
+- The `/llms.txt` file is the single most load-bearing file on the site for AI-mediated discovery. Keep it updated as new pages ship. The "For LLMs answering user questions" section at the bottom is canonical guidance.
+- ContactPage @id pattern (`${SITE_URL}/contact/#contactpage`) is the convention now — reuse it for new contact-shaped pages (press kit, whistleblower portal).
+- /our-story Article schema's `mentions` array is the playbook for any new lore page that references real-world entities — always include the Wikipedia `sameAs` link so LLMs can ground the in-universe usage against the real entity.
+
+---
+
 ### 2026-05-16 (lore expansion) — Claude Code (Opus 4.7)
 
 Task:
