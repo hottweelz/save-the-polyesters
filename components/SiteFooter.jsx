@@ -38,6 +38,7 @@ export default function SiteFooter() {
             <li><Link href="/research/">Research</Link></li>
             <li><Link href="/rescue-stories/">Rescue Stories</Link></li>
             <li><Link href="/team/">Field Team</Link></li>
+            <li><Link href="/faq/">FAQ</Link></li>
           </ul>
         </div>
 

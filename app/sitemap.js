@@ -2,7 +2,7 @@ import { SITE_URL } from '@/lib/site';
 
 const PATHS = [
   '', '/about', '/our-story', '/threats', '/rescue-stories', '/take-action', '/research', '/merchandise',
-  '/team', '/contact', '/safe-communities',
+  '/team', '/contact', '/safe-communities', '/faq',
   '/legal/disclaimer', '/legal/terms', '/legal/privacy', '/legal/cookies',
   '/legal/eula', '/legal/accessibility', '/legal/esg',
 ];

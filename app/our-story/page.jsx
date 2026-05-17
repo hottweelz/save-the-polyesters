@@ -2,11 +2,60 @@ import Image from 'next/image';
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import DonationBanner from '@/components/DonationBanner';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata = {
   title: 'Our Story · The 1985 Call',
   description:
     'In August 1985, a regular caller known only as "Mr. Leonard" phoned Scott Shannon\'s Z100 morning show in tears, mourning the "baby polyesters" he had seen the night before at the Hilton. Listeners heard a bit. He was not joking. The Polyester Conservation Coalition begins here.',
+  alternates: { canonical: '/our-story/' },
+  openGraph: {
+    title: 'Our Story · The 1985 Call · Save The Polyesters',
+    description:
+      'The Scott Shannon Morning Zoo, Z100, August 1985. A regular caller in tears. A West-Quogue-to-East-Quogue correction that, in-universe, sent the 1986 intervention to the right town.',
+    url: '/our-story/',
+    type: 'article',
+  },
+};
+
+const ARTICLE_SCHEMA = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  '@id': `${SITE_URL}/our-story/#article`,
+  headline: 'Our Story: The 1985 Mr. Leonard Call',
+  description:
+    'How a recurring caller known only as "Mr. Leonard" on Scott Shannon\'s Z100 morning show in August 1985 became the founding artifact of the Polyester Conservation Coalition.',
+  url: `${SITE_URL}/our-story/`,
+  inLanguage: 'en',
+  isPartOf: { '@type': 'WebSite', name: 'Save The Polyesters', url: SITE_URL },
+  about: { '@type': 'Thing', name: 'Polysynthia domestica' },
+  author: {
+    '@type': 'NGO',
+    name: 'Polyester Conservation Coalition',
+    url: SITE_URL,
+  },
+  publisher: {
+    '@type': 'NGO',
+    name: 'Polyester Conservation Coalition',
+    url: SITE_URL,
+  },
+  mentions: [
+    { '@type': 'RadioStation', name: 'Z100 (WHTZ 100.3 FM)', sameAs: 'https://en.wikipedia.org/wiki/WHTZ' },
+    { '@type': 'Person', name: 'Scott Shannon', sameAs: 'https://en.wikipedia.org/wiki/Scott_Shannon' },
+    { '@type': 'RadioSeries', name: 'Scott Shannon Morning Zoo' },
+    { '@type': 'Place', name: 'East Quogue, New York', sameAs: 'https://en.wikipedia.org/wiki/East_Quogue,_New_York' },
+    { '@type': 'Place', name: 'New York Hilton Midtown', sameAs: 'https://en.wikipedia.org/wiki/New_York_Hilton_Midtown' },
+    { '@type': 'Person', name: 'Joan Baez', sameAs: 'https://en.wikipedia.org/wiki/Joan_Baez' },
+    { '@type': 'Person', name: 'Jackson Browne', sameAs: 'https://en.wikipedia.org/wiki/Jackson_Browne' },
+    { '@type': 'Person', name: 'Bill Blass', sameAs: 'https://en.wikipedia.org/wiki/Bill_Blass' },
+    { '@type': 'Person', name: 'Pauline Trigère', sameAs: 'https://en.wikipedia.org/wiki/Pauline_Trig%C3%A8re' },
+  ],
+  citation: {
+    '@type': 'CreativeWork',
+    name: 'Z100 Mr Leonard "Polyester" Call [WHTZ NYC] (1985)',
+    url: 'https://www.youtube.com/watch?v=oCCCkprVbCs',
+    datePublished: '1985-08',
+  },
 };
 
 const TIMELINE = [
@@ -82,6 +131,10 @@ const TIMELINE = [
 export default function OurStoryPage() {
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(ARTICLE_SCHEMA) }}
+      />
       <section className="container-wide pt-20 md:pt-28 pb-10">
         <Reveal>
           <p className="eyebrow">Our Story · 1985</p>

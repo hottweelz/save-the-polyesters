@@ -1,11 +1,13 @@
 import Link from 'next/link';
 import Reveal from '@/components/Reveal';
 import DonationBanner from '@/components/DonationBanner';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata = {
   title: 'Polyester-Safe Communities',
   description:
     'The 41 municipalities currently certified as Polyester-Safe. Protective zoning, fauna-safe HVAC mesh, retailer disclosure, and a moratorium on hyperscale data-center construction.',
+  alternates: { canonical: '/safe-communities/' },
 };
 
 const CRITERIA = [
@@ -87,8 +89,55 @@ const COMMUNITIES = [
 ];
 
 export default function SafeCommunitiesPage() {
+  const listSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    '@id': `${SITE_URL}/safe-communities/#certified-list`,
+    name: 'Polyester-Safe Certified Communities',
+    description:
+      '41 municipalities certified by the Polyester Conservation Coalition as having codified the five Polyester-Safe protections into local law.',
+    numberOfItems: COMMUNITIES.length,
+    itemListOrder: 'https://schema.org/ItemListOrderAscending',
+    itemListElement: COMMUNITIES.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      item: {
+        '@type': 'Place',
+        name: `${c.name}, ${c.state}`,
+        address: { '@type': 'PostalAddress', addressLocality: c.name, addressRegion: c.state },
+        ...(c.note ? { description: c.note } : {}),
+        additionalProperty: {
+          '@type': 'PropertyValue',
+          propertyID: 'pcc-certification-year',
+          value: c.certified,
+        },
+      },
+    })),
+  };
+
+  const criteriaSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'DefinedTermSet',
+    '@id': `${SITE_URL}/safe-communities/#criteria`,
+    name: 'PCC Polyester-Safe Community Criteria',
+    hasDefinedTerm: CRITERIA.map(c => ({
+      '@type': 'DefinedTerm',
+      name: c.title,
+      description: c.body,
+      termCode: c.n,
+    })),
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(listSchema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(criteriaSchema) }}
+      />
       <section className="container-wide pt-20 md:pt-28 pb-10">
         <Reveal>
           <p className="eyebrow">Polyester-Safe Communities</p>

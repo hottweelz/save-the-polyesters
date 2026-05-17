@@ -21,7 +21,7 @@ export default function SiteHeader() {
           <span aria-hidden className="w-10 h-10 rounded-full bg-moss-700 text-cream-50 grid place-items-center font-display text-xl">P</span>
           <span className="leading-tight">
             <span className="block font-display text-lg text-moss-900 group-hover:text-moss-700">Save The Polyesters</span>
-            <span className="block text-[10px] uppercase tracking-[0.25em] text-rose-600">Polyester Conservation Coalition · est. 2014</span>
+            <span className="block text-[10px] uppercase tracking-[0.25em] text-rose-600">PCC · est. 2014</span>
           </span>
         </Link>
 

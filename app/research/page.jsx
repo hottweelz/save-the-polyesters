@@ -1,11 +1,13 @@
 import Reveal from '@/components/Reveal';
 import DonationBanner from '@/components/DonationBanner';
 import PopulationChart from '@/components/PopulationChart';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata = {
   title: 'Research',
   description:
     'Peer-reviewed and field-published research from the Polyester Conservation Coalition Institute: lung collapse syndrome, synthetic habitat fragmentation, the ecological cost of AI expansion, urban heat island mortality.',
+  alternates: { canonical: '/research/' },
 };
 
 const PAPERS = [
@@ -78,8 +80,56 @@ const PARTNERS = [
 ];
 
 export default function ResearchPage() {
+  const researchSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    '@id': `${SITE_URL}/research/#collection`,
+    url: `${SITE_URL}/research/`,
+    name: 'PCC Research Library',
+    description:
+      'Open-access, peer-reviewed research from the Polyester Conservation Coalition Institute.',
+    isPartOf: { '@type': 'WebSite', name: 'Save The Polyesters', url: SITE_URL },
+    mainEntity: {
+      '@type': 'ItemList',
+      numberOfItems: PAPERS.length,
+      itemListElement: PAPERS.map((p, i) => {
+        const authors = p.authors.split(',').map(a => ({
+          '@type': 'Person',
+          name: a.trim(),
+        }));
+        return {
+          '@type': 'ListItem',
+          position: i + 1,
+          item: {
+            '@type': 'ScholarlyArticle',
+            '@id': `${SITE_URL}/research/#${p.id}`,
+            headline: p.title,
+            name: p.title,
+            abstract: p.abstract.replace(/\s+/g, ' ').trim(),
+            author: authors,
+            isPartOf: {
+              '@type': 'Periodical',
+              name: p.journal,
+              issueNumber: p.vol,
+            },
+            publisher: {
+              '@type': 'Organization',
+              name: 'Polyester Conservation Coalition Institute',
+            },
+            inLanguage: 'en',
+            isAccessibleForFree: true,
+          },
+        };
+      }),
+    },
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(researchSchema) }}
+      />
       <section className="container-wide pt-20 md:pt-28 pb-10">
         <Reveal>
           <p className="eyebrow">Research Library</p>

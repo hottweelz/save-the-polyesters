@@ -1,10 +1,12 @@
 import Reveal from '@/components/Reveal';
 import DonationBanner from '@/components/DonationBanner';
+import { SITE_URL } from '@/lib/site';
 
 export const metadata = {
   title: 'The Field Team',
   description:
     'Researchers, rescuers, veterinarians, and counsel of the Polyester Conservation Coalition. Forty-eight founding members in 2014; two hundred ninety-one PCC employees today.',
+  alternates: { canonical: '/team/' },
 };
 
 const LEADERSHIP = [
@@ -75,8 +77,34 @@ const FOUNDERS_LIST = [
 ];
 
 export default function TeamPage() {
+  const orgSchema = {
+    '@context': 'https://schema.org',
+    '@type': 'NGO',
+    '@id': `${SITE_URL}/#organization`,
+    name: 'Polyester Conservation Coalition',
+    alternateName: 'Save The Polyesters',
+    url: SITE_URL,
+    foundingDate: '2014-04-22',
+    foundingLocation: { '@type': 'Place', name: 'East Quogue, NY' },
+    description:
+      'Nonprofit alliance defending the world\'s last wild polyester populations from industrial fiber harvesting, microfiber habitat collapse, and the expansion of AI infrastructure.',
+    member: LEADERSHIP.map(m => ({
+      '@type': 'Person',
+      name: m.name,
+      jobTitle: m.role,
+      description: m.bio.replace(/\s+/g, ' ').trim(),
+      worksFor: { '@id': `${SITE_URL}/#organization` },
+    })),
+    numberOfEmployees: { '@type': 'QuantitativeValue', value: 291 },
+    areaServed: 'Worldwide',
+  };
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(orgSchema) }}
+      />
       <section className="container-wide pt-20 md:pt-28 pb-10">
         <Reveal>
           <p className="eyebrow">The Field Team</p>
